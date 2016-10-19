@@ -1,0 +1,58 @@
+---
+- hosts: all
+  become: true
+  vars:
+    srcdir: /home/vagrant/mydumper
+  tasks:
+  - name: install percona server apt-key
+    apt_key:
+      keyserver=keys.gnupg.net
+      id=9334A25F8507EFA5
+      state=present
+  - name: add percona repo
+    apt_repository: 
+      repo='deb http://repo.percona.com/apt {{ ansible_distribution_release }} main' 
+      state=present
+  - name: ensure pre-requsites are installed
+    apt:
+      name={{ item }}
+      state=present
+    with_items:
+      - libglib2.0-dev
+      - zlib1g-dev
+      - libpcre3-dev
+      - libssl-dev
+      - cmake
+      - g++
+      - git
+      - libperconaserverclient18.1-dev
+      - libperconaserverclient18.1
+  - name: mydumper git repo
+    become_user: vagrant
+    git:
+      accept_hostkey: yes
+      repo: https://github.com/maxbube/mydumper.git
+      dest: "{{ srcdir }}/"
+      update: yes
+  - name: clean previous run
+    file:
+       path={{ item }}
+       state=absent
+    with_items:
+        - "{{ srcdir }}/mydumper"
+        - "{{ srcdir }}/myloader"
+        - "{{ srcdir }}/CMakeCache.txt"
+  - name: cmake mydumper
+    command: cmake . -DMYSQL_LIBRARIES_perconaserverclient:FILEPATH=/usr/lib/x86_64-linux-gnu/libperconaserverclient.a
+    args:
+      chdir: "{{ srcdir }}"
+  - name: make mydumper
+    make: chdir={{ srcdir }}
+  - name: fetch binaries
+    fetch:
+      src={{ item }}
+      dest=/opt/src/mydumper/{{ inventory_hostname }}/
+      flat=yes
+    with_items:
+      - "{{ srcdir }}/mydumper"
+      - "{{ srcdir }}/myloader"
