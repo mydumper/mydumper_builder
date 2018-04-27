@@ -30,8 +30,8 @@
       - cmake
       - g++
       - git
-      - libperconaserverclient18.1-dev
-      - libperconaserverclient18.1
+      - libperconaserverclient20-dev
+      - libperconaserverclient20
   - name: mydumper git repo
     become_user: vagrant
     git:

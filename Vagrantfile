@@ -25,24 +25,35 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define :debian8 do |debian8|
-    debian8.vm.box = "debian/8"
-    debian8.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/8.1.0/debian-8.1.0-amd64.box"
+    debian8.vm.box = "debian/jessie64"
+    #debian8.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/8.1.0/debian-8.1.0-amd64.box"
     debian8.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
     end
   end
 
   config.vm.define :debian7 do |debian7|
-    debian7.vm.box = "debian/7"
-    debian7.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/7.8.0/debian-7.8.0-amd64.box"
+    debian7.vm.box = "debian/wheezy64"
+    #debian7.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/7.8.0/debian-7.8.0-amd64.box"
     debian7.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
     end
   end
 
-  config.vm.define :precise do |precise|
-    ubuntu.vm.box = "ubuntu/precise64"
-    ubuntu.vm.provision :ansible do |ansible|
+  config.vm.define :trusty do |trusty|
+    trusty.vm.box = "ubuntu/trusty64"
+    trusty.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian.yml"
+    end
+  end
+
+  config.vm.define :xenial do |xenial|
+    xenial.vm.box = "ubuntu/xenial64"
+    xenial.vm.provision "install pyhton 2.7",
+      type: "shell",
+      preserve_order: true,
+      inline: "apt-get -y install python"
+    xenial.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"
     end
   end

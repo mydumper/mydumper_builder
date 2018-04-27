@@ -44,7 +44,7 @@
         - "{{ srcdir }}/myloader"
         - "{{ srcdir }}/CMakeCache.txt"
   - name: cmake mydumper
-    command: cmake . -DMYSQL_LIBRARIES_mysqlclient:FILEPATH=/usr/lib64/mysql/libmysqlclient.a -DCMAKE_EXE_LINKER_FLAGS:STRING=-lstdc++
+    command: cmake . -DMYSQL_LIBRARIES_mysqlclient:FILEPATH=/usr/lib64/mysql/libmysqlclient.a
     args:
       chdir: "{{ srcdir }}"
   - name: make mydumper
