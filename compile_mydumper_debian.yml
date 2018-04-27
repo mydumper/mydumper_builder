@@ -2,13 +2,18 @@
 - hosts: all
   become: true
   vars:
-    srcdir: /home/vagrant/mydumper
+    srcdir: /tmp/mydumper
   tasks:
+  - name: debian 9 needs dirmngr
+    apt: 
+      name: dirmngr
+      state: present
+    when: ansible_distribution_release == "stretch"
   - name: install percona server apt-key
     apt_key:
-      keyserver=keys.gnupg.net
-      id=9334A25F8507EFA5
-      state=present
+      keyserver: keys.gnupg.net
+      id: 9334A25F8507EFA5
+      state: present
   - name: add percona repo
     apt_repository: 
       repo='deb http://repo.percona.com/apt {{ ansible_distribution_release }} main' 

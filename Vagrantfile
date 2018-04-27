@@ -17,6 +17,13 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  config.vm.define :debian9 do |debian9|
+    debian9.vm.box = "debian/stretch64"
+    debian9.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian.yml"
+    end
+  end
+
   config.vm.define :debian8 do |debian8|
     debian8.vm.box = "debian/8"
     debian8.vm.box_url = "https://github.com/kraksoft/vagrant-box-debian/releases/download/8.1.0/debian-8.1.0-amd64.box"
@@ -33,7 +40,7 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define :ubuntu do |ubuntu|
+  config.vm.define :precise do |precise|
     ubuntu.vm.box = "ubuntu/precise64"
     ubuntu.vm.provision :ansible do |ansible|
       ansible.playbook = "compile_mydumper_debian.yml"

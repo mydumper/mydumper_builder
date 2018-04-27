@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   vars:
-    srcdir: /home/vagrant/mydumper
+    srcdir: /tmp/mydumper
   tasks:
   - name: add percona repo
     yum:
