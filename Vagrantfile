@@ -63,6 +63,18 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  # Ubuntu 18
+  config.vm.define :bionic do |bionic|
+    bionic.vm.box = "ubuntu/bionic64"
+    bionic.vm.provision "install pyhton 2.7",
+      type: "shell",
+      preserve_order: true,
+      inline: "apt-get -y install python"
+    bionic.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_debian.yml"
+    end
+  end
+
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
 end
