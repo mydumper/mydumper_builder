@@ -1,0 +1,55 @@
+---
+- hosts: all
+  become: true
+  vars:
+    srcdir: /tmp/mydumper
+  tasks:
+  - name: ensure pre-requsites are installed
+    yum:
+      name={{ item }}
+      state=present
+    with_items:
+      - glib2-devel
+      - zlib-devel
+      - pcre-devel
+      - openssl-devel
+      - cmake
+      - gcc-c++
+      - git
+  - name: installed mariadb libs
+    yum:
+      name=mariadb-libs
+      state=latest
+#  - name: install mariadb devel
+#    yum:
+#      name: 
+#      state: present
+  - name: mydumper git repo
+    become_user: vagrant
+    git:
+      accept_hostkey: yes
+      repo: https://github.com/maxbube/mydumper.git
+      dest: "{{ srcdir }}/"
+      update: yes
+  - name: clean previous run
+    file:
+       path={{ item }}
+       state=absent
+    with_items:
+        - "{{ srcdir }}/mydumper"
+        - "{{ srcdir }}/myloader"
+        - "{{ srcdir }}/CMakeCache.txt"
+  - name: cmake mydumper
+    command: cmake . -DMYSQL_LIBRARIES_mysqlclient:FILEPATH=/usr/lib64/mysql/libmysqlclient.a
+    args:
+      chdir: "{{ srcdir }}"
+  - name: make mydumper
+    make: chdir={{ srcdir }}
+  - name: fetch binaries
+    fetch:
+      src={{ item }}
+      dest=/opt/src/mydumper/{{ inventory_hostname }}/
+      flat=yes
+    with_items:
+      - "{{ srcdir }}/mydumper"
+      - "{{ srcdir }}/myloader"
