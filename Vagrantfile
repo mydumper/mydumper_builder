@@ -16,6 +16,13 @@ Vagrant.configure(2) do |config|
       ansible.playbook = "compile_mydumper_rhel.yml"
     end
   end
+
+  config.vm.define :el8 do |el8|
+    el8.vm.box = "centos/8"
+    el8.vm.provision :ansible do |ansible|
+      ansible.playbook = "compile_mydumper_rhel8.yml"
+    end
+  end
   
   # Debian 9
   config.vm.define :stretch do |stretch|

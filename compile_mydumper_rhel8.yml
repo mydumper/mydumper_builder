@@ -5,12 +5,17 @@
     srcdir: /tmp/mydumper
   tasks:
   - name: add percona repo
-    yum:
-      name: https://www.percona.com/downloads/percona-release/redhat/LATEST/
+    dnf:
+      name: https://repo.percona.com/yum/percona-release-latest.noarch.rpm
       state: present
 
+  - name: disable dnf mysql module
+    command: dnf module disable mysql -y
+    args:
+      warn: false
+
   - name: ensure pre-requsites are installed
-    yum:
+    dnf:
       name:
         - glib2-devel
         - zlib-devel
@@ -21,13 +26,8 @@
         - git
       state: present
 
-  - name: remove installed mysql libs
-    yum:
-      name: mariadb-libs
-      state: absent
-
   - name: install mysql devel
-    yum:
+    dnf:
       name: Percona-Server-devel-57
       state: present
 
@@ -54,7 +54,7 @@
       chdir: "{{ srcdir }}"
 
   - name: make mydumper
-    make: chdir={{ srcdir }}
+    make: "chdir={{ srcdir }}"
 
   - name: fetch binaries
     fetch:
@@ -64,3 +64,4 @@
     with_items:
       - "{{ srcdir }}/mydumper"
       - "{{ srcdir }}/myloader"
+
