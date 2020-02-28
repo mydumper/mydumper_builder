@@ -10,6 +10,7 @@ mydumper binaries and packages automation
 # Directories
 
 /opt/src/mydumper/ (binaries destination)
+
 /opt/PKGS (packages destination)
 
 # Compiling binaries
