@@ -36,3 +36,4 @@ yum install epel-release
 yum install rpm-build dpkg dpkg-devel fakeroot
 
 ./package/build.sh $VERSION $BUILD_NUMBER
+
