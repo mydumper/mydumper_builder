@@ -1,3 +1,6 @@
+# Obsolete
+This repository became obsolete as we implement the building inside the MyDumper repository and based on CircleCI and GitHub Actions instead of Vagrant. Some files has been copied to mydumper/mydumper. 
+
 # mydumper_builder
 mydumper binaries and packages automation
 
